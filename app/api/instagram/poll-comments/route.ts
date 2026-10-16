@@ -12,19 +12,14 @@ const DEFAULT_PUBLIC_REPLIES = ["Check your DMs! 📥", "Sent! 🔥", "Check inb
 const POLL_SECRET = process.env.POLL_SECRET || process.env.INSTAGRAM_WEBHOOK_VERIFY_TOKEN
 
 function keywordMatches(triggerValue: string, text: string): boolean {
+  const lower = text.toLowerCase()
   return triggerValue
     .split(",")
-    .map((k) => k.trim())
+    .map((k) => k.trim().toLowerCase())
     .filter(Boolean)
-    .some((k) => {
-      try {
-        return new RegExp(\b${k.replace(/[.*+?^${}()|[]\]/g, "\$&")}\b, "i").test(text)
-      } catch {
-        return text.toLowerCase().includes(k.toLowerCase())
-      }
-    })
+    .some((k) => lower.includes(k))
 }
-
+`
 function parseContent(raw: any) {
   if (!raw) return {}
   if (typeof raw === "string") {
